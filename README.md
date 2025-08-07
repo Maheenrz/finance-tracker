@@ -48,14 +48,15 @@ DELETE /api/transactions/:id/ – Delete a transaction
    python manage.py runserver
 
 ## Frontend (React)
-Install dependencies:
-    ```bash
-    npm install
+1. Install dependencies:
+   ```bash
+   npm install
 
-Add your Google Client ID to a .env file:
-VITE_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
-Start the development server:
-npm run dev
+2. Add your Google Client ID to a .env file:
+   VITE_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+3. Start the development server:
+   ```bash
+    npm run dev
 
 
 
