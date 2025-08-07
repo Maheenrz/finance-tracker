@@ -49,14 +49,12 @@ DELETE /api/transactions/:id/ – Delete a transaction
 
 ## Frontend (React)
 Install dependencies:
-```bash
-npm install
+    ```bash
+    npm install
 
 Add your Google Client ID to a .env file:
-```bash
 VITE_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
 Start the development server:
-```bash
 npm run dev
 
 
