@@ -1,12 +1,62 @@
-# React + Vite
+# Finance Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A personal finance tracker built with Django REST Framework and React. Users can authenticate via Google OAuth and manage their income and expense transactions through an interactive dashboard.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Google OAuth 2.0 Authentication
+- Add, edit, delete transactions
+- Categorize transactions as INCOME or EXPENSE
+- View total income, expenses, and net balance
+- Filter transactions by type
+- Responsive, styled UI using Tailwind CSS
 
-## Expanding the ESLint configuration
+> ⚠️ Note: This is a simulation-based app. No real ATM, debit card, or bank account information is used or required. All financial data is user-provided for demonstration and practice purposes only.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack
+
+- **Frontend**: React, Tailwind CSS, FontAwesome
+- **Backend**: Django, Django REST Framework
+- **Auth**: dj-rest-auth, allauth, Google OAuth2
+
+## API Endpoints
+POST /api/auth/google/ – Authenticate with Google
+GET /api/transactions/ – List transactions
+POST /api/transactions/ – Create new transaction
+PUT /api/transactions/:id/ – Update a transaction
+DELETE /api/transactions/:id/ – Delete a transaction
+
+## Setup Instructions
+
+### Backend (Django)
+
+1. Clone the repository and create a virtual environment:
+   ```bash
+   python -m venv env
+   source env/bin/activate
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+
+3. Run migrations:
+   ```bash
+   python manage.py migrate
+
+4. Create a .env or configure Google credentials in settings.py
+5. Start the server:
+   ```bash
+   python manage.py runserver
+
+## Frontend (React)
+1. Install dependencies:
+   ```bash
+   npm install
+
+2. Add your Google Client ID to a .env file:
+   VITE_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+3. Start the development server:
+   ```bash
+    npm run dev
+
+
+

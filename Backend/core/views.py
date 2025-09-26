@@ -44,20 +44,26 @@ class GoogleLogin(SocialLoginView):
             if id_token_str:
                 # If we have an ID token, convert it to access_token format
                 try:
-                    # Verify the ID token
+                    # Verify the ID token using client ID from environment variables
                     google_request = requests.Request()
                     id_info = id_token.verify_oauth2_token(
-                        id_token_str, google_request,
-                        "456527559253-4utvgg85fj5gskq42asvlr6pqje53uuf.apps.googleusercontent.com"
+                        id_token_str,
+                        google_request,
+                        settings.GOOGLE_OAUTH2_CLIENT_ID,  # Now using from .env
+                        clock_skew_in_seconds=10  # Added clock skew tolerance
                     )
 
-                    # Get user info from Google using the ID token
-                    google_user_info_url = f"https://www.googleapis.com/oauth2/v1/userinfo?access_token={id_token_str}"
-
-                    # For ID tokens, we need to extract user info differently
+                    # Extract user info from the verified token
                     email = id_info.get('email')
                     name = id_info.get('name', '')
                     google_id = id_info.get('sub')
+
+                    # Validate required fields
+                    if not email:
+                        return Response(
+                            {'error': 'Email not provided by Google'},
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
 
                     # Create or get user
                     user, created = User.objects.get_or_create(
@@ -84,10 +90,17 @@ class GoogleLogin(SocialLoginView):
                         }
                     }, status=status.HTTP_200_OK)
 
-                except Exception as e:
-                    print(f"ID token verification failed: {e}")
+                except ValueError as ve:
+                    # Specific handling for token verification errors
+                    print(f"ID token verification failed: {ve}")
                     return Response(
-                        {'error': 'Invalid ID token', 'details': str(e)},
+                        {'error': 'Invalid or expired ID token', 'details': str(ve)},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                except Exception as e:
+                    print(f"Unexpected error during ID token processing: {e}")
+                    return Response(
+                        {'error': 'Token processing failed', 'details': str(e)},
                         status=status.HTTP_400_BAD_REQUEST
                     )
 
@@ -105,5 +118,5 @@ class GoogleLogin(SocialLoginView):
             print(f"Google login error: {e}")
             return Response(
                 {'error': 'Google authentication failed', 'details': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
